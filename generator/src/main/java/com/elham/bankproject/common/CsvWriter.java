@@ -21,7 +21,6 @@ public class CsvWriter<T> {
     public CsvWriter(String fileName, String fileLocation) {
         this.fileName = fileName;
         this.fileLocation=fileLocation;
-        System.out.println("file loc is"+fileLocation);
     }
 
     public void writeToFile(String header, List<T> list) {

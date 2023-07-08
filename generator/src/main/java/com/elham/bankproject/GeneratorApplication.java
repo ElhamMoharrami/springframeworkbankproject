@@ -31,7 +31,7 @@ public class GeneratorApplication {
             customerCsvWriter.writeToFile("CustomerId,Name,PostAddress", customerList);
             long endCustomerGenerateTimeMillis = System.currentTimeMillis();
             long timeToGenerateCustomers = endCustomerGenerateTimeMillis - startCustomerGenerateTimeMillis;
-            logger.info("customers generated . took " + timeToGenerateCustomers + " milli seconds.");
+            logger.info("customers generated in "+customerGenerator.getFileLocation()+" . took " + timeToGenerateCustomers + " milli seconds.");
 
             long startAccountGenerateTimeMillis = System.currentTimeMillis();
             AccountGenerator accountGenerator = (AccountGenerator) ctx.getBean("accountGenerator", customerList);
@@ -41,7 +41,7 @@ public class GeneratorApplication {
             accountWriter.writeToFile("CustomerId,AccountId", accountList);
             long endAccountGenerateTimeMillis = System.currentTimeMillis();
             long timeToGenerateAccounts = endAccountGenerateTimeMillis - startAccountGenerateTimeMillis;
-            logger.info("accounts generated in . took " + timeToGenerateAccounts
+            logger.info("accounts generated in"+accountGenerator.getFileLocation()+" . took " + timeToGenerateAccounts
                     + " milli seconds.");
 
             TransactionGenerator transactionGenerator = (TransactionGenerator) ctx.getBean("transactionGenerator",
@@ -56,6 +56,9 @@ public class GeneratorApplication {
                         transactionGenerator.getFileLocation());
                 transactionWriter.writeToFile("TransactionId,EpochTime,Amount,SourceAcc,DestinationAcc,Type",
                         sublist);
+                logger.info("transaction file"+i+" generated in"+transactionGenerator.getFileLocation()+
+                        accountGenerator.getFileLocation()+" . took " + timeToGenerateAccounts
+                        + " milli seconds.");
             }
 
         } catch (ArrayIndexOutOfBoundsException e) {

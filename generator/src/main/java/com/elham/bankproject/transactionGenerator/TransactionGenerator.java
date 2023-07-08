@@ -1,10 +1,7 @@
 package com.elham.bankproject.transactionGenerator;
 
-import com.elham.bankproject.common.CsvWriter;
 import com.elham.bankproject.model.Account;
 import com.elham.bankproject.model.Transaction;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
@@ -12,7 +9,6 @@ import java.util.List;
 import java.util.Random;
 
 public class TransactionGenerator extends AbstractGenerator<Transaction> {
-    private static final Logger logger = LogManager.getLogger(TransactionGenerator.class);
 
     @Value("${transactiongenerator.transaction.limit}")
     private String transactionLimit;
