@@ -2,7 +2,6 @@ package com.elham.bankproject.common;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -12,15 +11,17 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
-@Component
 public class CsvWriter<T> {
     private final String fileName;
+
     private final String fileLocation;
+
     private static final Logger logger = LogManager.getLogger(CsvWriter.class);
 
     public CsvWriter(String fileName, String fileLocation) {
         this.fileName = fileName;
-        this.fileLocation = fileLocation;
+        this.fileLocation=fileLocation;
+        System.out.println("file loc is"+fileLocation);
     }
 
     public void writeToFile(String header, List<T> list) {
@@ -34,7 +35,8 @@ public class CsvWriter<T> {
             for (T element : list) {
                 bufferedList.write(element.toString() + "\n");
             }
-            logger.info(fileName + " generated successfully in " + fileLocation + " with " + list.size() + " items; took  " + duration + " milliseconds");
+            logger.info(fileName + " generated successfully in " + fileLocation + " with " + list.size()
+                    + " items; took  " + duration + " milliseconds");
         } catch (IOException e) {
             System.out.println(e.getMessage());
             logger.error("Something went wrong,could not create file.");

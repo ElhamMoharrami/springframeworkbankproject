@@ -1,9 +1,9 @@
 package com.elham.bankproject;
 
-import com.elham.bankproject.common.ConfigLoader;
 import com.elham.bankproject.common.CsvWriter;
 import com.elham.bankproject.model.Account;
 import com.elham.bankproject.model.Customer;
+import com.elham.bankproject.model.Transaction;
 import com.elham.bankproject.transactionGenerator.AccountGenerator;
 import com.elham.bankproject.transactionGenerator.CustomerGenerator;
 import com.elham.bankproject.transactionGenerator.TransactionGenerator;
@@ -23,42 +23,46 @@ public class GeneratorApplication {
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(GeneratorApplication.class, args);
         try {
-            ConfigLoader loadConfig = (ConfigLoader) ctx.getBean("configLoader");
-            String fileLoc = loadConfig.loadConfig("files.destination");
             long startCustomerGenerateTimeMillis = System.currentTimeMillis();
-            Integer customerCount = Integer.parseInt(loadConfig.loadConfig("customergenerator.customerCount"));
-            CustomerGenerator customerGenerator = (CustomerGenerator) ctx.getBean("customerGenerator", customerCount);
-            List<Customer> customerList = customerGenerator.generateCustomers();
-            String fileName = "customers.csv";
-            CsvWriter<Customer> customerCsvWriter = (CsvWriter<Customer>) ctx.getBean("csvWriter", fileName, fileLoc);
+            CustomerGenerator customerGenerator = (CustomerGenerator) ctx.getBean("customerGenerator");
+            List<Customer> customerList = customerGenerator.generate();
+            CsvWriter<Customer> customerCsvWriter = (CsvWriter<Customer>) ctx.getBean("csvWriter",
+                    "customers.csv", customerGenerator.getFileLocation());
             customerCsvWriter.writeToFile("CustomerId,Name,PostAddress", customerList);
             long endCustomerGenerateTimeMillis = System.currentTimeMillis();
             long timeToGenerateCustomers = endCustomerGenerateTimeMillis - startCustomerGenerateTimeMillis;
-            logger.info("customers generated in " + fileLoc + " . took " + timeToGenerateCustomers + " milli seconds.");
+            logger.info("customers generated . took " + timeToGenerateCustomers + " milli seconds.");
+
             long startAccountGenerateTimeMillis = System.currentTimeMillis();
             AccountGenerator accountGenerator = (AccountGenerator) ctx.getBean("accountGenerator", customerList);
-            List<Account> accountList = accountGenerator.generateAccount();
-            CsvWriter<Account> accountWriter = (CsvWriter<Account>) ctx.getBean("csvWriter", "accounts.csv",
-                    fileLoc);
+            List<Account> accountList = accountGenerator.generate();
+            CsvWriter<Account> accountWriter = (CsvWriter<Account>) ctx.getBean("csvWriter", "accounts.csv"
+                    , accountGenerator.getFileLocation());
             accountWriter.writeToFile("CustomerId,AccountId", accountList);
             long endAccountGenerateTimeMillis = System.currentTimeMillis();
             long timeToGenerateAccounts = endAccountGenerateTimeMillis - startAccountGenerateTimeMillis;
-            logger.info("accounts generated in " + fileLoc + " . took " + timeToGenerateAccounts + " milli seconds.");
-            int transactionMinBound = Integer.parseInt(loadConfig.loadConfig
-                    ("transactiongenerator.transaction.min"));
-            int transactionMaxBound = Integer.parseInt(loadConfig.loadConfig
-                    ("transactiongenerator.transaction.max"));
+            logger.info("accounts generated in . took " + timeToGenerateAccounts
+                    + " milli seconds.");
+
             TransactionGenerator transactionGenerator = (TransactionGenerator) ctx.getBean("transactionGenerator",
-                    accountList, transactionMinBound,
-                    transactionMaxBound);
-            transactionGenerator.generateTransaction();
+                    accountList);
+            List<Transaction> transactionList = transactionGenerator.generate();
+            int transactionLimit = transactionGenerator.getTransactionLimit();
+            int trListSize = transactionList.size();
+            for (int i = 0; i < trListSize; i += transactionLimit) {
+                int end = Math.min(trListSize, i + transactionLimit);
+                List<Transaction> sublist = transactionList.subList(i, end);
+                CsvWriter<Transaction> transactionWriter = new CsvWriter<>("transaction" + i + ".csv",
+                        transactionGenerator.getFileLocation());
+                transactionWriter.writeToFile("TransactionId,EpochTime,Amount,SourceAcc,DestinationAcc,Type",
+                        sublist);
+            }
+
         } catch (ArrayIndexOutOfBoundsException e) {
             logger.error("No directory Entered. Please Enter a Directory and the path to config file.");
         } catch (NumberFormatException e) {
             logger.error("couldn't get value from config file");
         }
     }
-
-
 }
 

@@ -10,22 +10,23 @@ import com.elham.bankproject.transactionGenerator.TransactionGenerator;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 
 import java.util.List;
 
 @Configuration
+@PropertySource("classpath:application.properties")
 public class AnnotationConfig {
     @Bean(name = "customerGenerator")
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    CustomerGenerator customerGenerator(int customerCount) {
-        return new CustomerGenerator(customerCount);
+    CustomerGenerator customerGenerator() {
+        return new CustomerGenerator();
     }
 
     @Bean(name = "csvWriter")
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    CsvWriter getWriter(String fileName, String fileLoc) {
-        return new CsvWriter(fileName, fileLoc);
+    CsvWriter getWriter(String fileName,String fileLocation) {
+        return new CsvWriter(fileName,fileLocation);
     }
 
     @Bean(name = "configLoader")
@@ -41,7 +42,7 @@ public class AnnotationConfig {
 
     @Bean(name = "transactionGenerator")
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    TransactionGenerator getTransactionGenerator(List<Account> accounts, int transactionMinBound, int transactionMaxBound) {
-        return new TransactionGenerator(accounts, transactionMinBound, transactionMaxBound);
+    TransactionGenerator getTransactionGenerator(List<Account> accounts) {
+        return new TransactionGenerator(accounts);
     }
 }

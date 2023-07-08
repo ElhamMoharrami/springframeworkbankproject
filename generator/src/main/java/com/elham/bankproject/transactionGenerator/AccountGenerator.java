@@ -1,14 +1,18 @@
 package com.elham.bankproject.transactionGenerator;
 
-import com.elham.bankproject.common.ConfigLoader;
 import com.elham.bankproject.model.Account;
 import com.elham.bankproject.model.Customer;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class AccountGenerator {
+public class AccountGenerator extends AbstractGenerator<Account> {
+    @Value("${accountgenerator.bound.min}")
+    private String accountMinBound;
+    @Value("${accountgenerator.bound.max}")
+    private String accountMaxBound;
     private static final List<Integer> accIds = new ArrayList<>();
     private static final List<Account> accounts = new ArrayList<>();
     private final List<Customer> customersList;
@@ -17,10 +21,14 @@ public class AccountGenerator {
         this.customersList = customersList;
     }
 
-    public List<Account> generateAccount() {
-        ConfigLoader loadConfig = new ConfigLoader();
-        int accountMinBound = Integer.parseInt(loadConfig.loadConfig("accountgenerator.bound.min"));
-        int accountMaxBound = Integer.parseInt(loadConfig.loadConfig("accountgenerator.bound.max"));
+    public static List<Integer> getAccIds() {
+        return accIds;
+    }
+
+    @Override
+    public List<Account> generate() {
+        int accountMinBound = Integer.parseInt(this.accountMinBound);
+        int accountMaxBound = Integer.parseInt(this.accountMaxBound);
         Random random = new Random();
         int accountId = 1;
         for (Customer customer : customersList) {
@@ -33,9 +41,5 @@ public class AccountGenerator {
             }
         }
         return accounts;
-    }
-
-    public static List<Integer> getAccIds() {
-        return accIds;
     }
 }
