@@ -1,4 +1,4 @@
-package com.elham.bankproject.transactionGenerator;
+package com.elham.bankproject.transaction;
 
 import java.util.Random;
 

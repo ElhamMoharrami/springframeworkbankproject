@@ -1,4 +1,4 @@
-package com.elham.bankproject.transactionGenerator;
+package com.elham.bankproject.transaction;
 
 import org.springframework.beans.factory.annotation.Value;
 
