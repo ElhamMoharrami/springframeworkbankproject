@@ -16,8 +16,8 @@ import java.util.List;
 public class AnnotationConfig {
     @Bean(name = "csvWriter")
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    CsvWriter getWriter(String fileName, String fileLocation) {
-        return new CsvWriter(fileName, fileLocation);
+    CsvWriter<?> getWriter(String fileName, String fileLocation) {
+        return new CsvWriter<>(fileName, fileLocation);
     }
 
     @Bean(name = "configLoader")
