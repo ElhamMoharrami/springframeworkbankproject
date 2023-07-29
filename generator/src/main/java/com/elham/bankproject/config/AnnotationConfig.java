@@ -16,46 +16,46 @@ import java.util.List;
 
 @Configuration
 public class AnnotationConfig {
-    @Bean(name = "csvWriter")
+    @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    CsvWriter<?> getWriter(String fileName) {
+    CsvWriter<?> csvWriter(String fileName) {
         return new CsvWriter<>(fileName);
     }
 
-    @Bean(name = "configLoader")
-    ConfigLoader getConfigLoader() {
+    @Bean
+    ConfigLoader configLoader() {
         return new ConfigLoader();
     }
 
-    @Bean(name = "customerGenerator")
-    CustomerGenerator getCustomerGenerator() {
+    @Bean
+    CustomerGenerator customerGenerator() {
         return new CustomerGenerator();
     }
 
-    @Bean(name = "accountGenerator")
+    @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    AccountGenerator getAccountGenerator(List<Customer> customersList) {
+    AccountGenerator accountGenerator(List<Customer> customersList) {
         return new AccountGenerator(customersList);
     }
 
-    @Bean(name = "transactionGenerator")
+    @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    TransactionGenerator getTransactionGenerator(List<Account> accounts) {
+    TransactionGenerator transactionGenerator(List<Account> accounts) {
         return new TransactionGenerator(accounts);
     }
 
-    @Bean(name = "propertyContainer")
-    PropertyContainer gerPropertyContainer(Environment environment) {
+    @Bean
+    PropertyContainer propertyContainer(Environment environment) {
         return new PropertyContainer(environment);
     }
 
-    @Bean(name = "dataGenerator")
-    DataGenerator getDataGenerator() {
+    @Bean
+    DataGenerator dataGenerator() {
         return new DataGenerator();
     }
 
-    @Bean(name = "dataRunner")
-    DataRunner getDataRunner(DataGenerator dataGenerator) {
+    @Bean
+    DataRunner dataRunner(DataGenerator dataGenerator) {
         return new DataRunner(dataGenerator);
     }
 }
