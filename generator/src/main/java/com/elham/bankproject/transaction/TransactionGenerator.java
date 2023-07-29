@@ -2,22 +2,12 @@ package com.elham.bankproject.transaction;
 
 import com.elham.bankproject.model.Account;
 import com.elham.bankproject.model.Transaction;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class TransactionGenerator extends AbstractGenerator<Transaction> {
-
-    @Value("${transactiongenerator.transaction.limit}")
-    private String transactionLimit;
-
-    @Value("${transactiongenerator.transaction.min}")
-    public int transactionMinBound;
-
-    @Value("${transactiongenerator.transaction.max}")
-    public int transactionMaxBound;
 
     List<Transaction> transactionList = new ArrayList<>();
 
@@ -31,8 +21,9 @@ public class TransactionGenerator extends AbstractGenerator<Transaction> {
     public List<Transaction> generate() {
         Random random = new Random();
         List<Integer> accountIds = AccountGenerator.getAccIds();
-        int countTransactions = random.nextInt(this.transactionMinBound + this.transactionMaxBound) +
-                this.transactionMaxBound;
+        int countTransactions = random.nextInt(super.getPropertyContainer().getTransactionGeneratorMinBound() +
+                super.getPropertyContainer().getTransactionGeneratorMaxBound()) +
+                super.getPropertyContainer().getTransactionGeneratorMaxBound();
         long transactionId = 0;
         for (Account account : accounts) {
             for (int i = 0; i < countTransactions; i++) {
@@ -66,6 +57,6 @@ public class TransactionGenerator extends AbstractGenerator<Transaction> {
     }
 
     public Integer getTransactionLimit() {
-        return Integer.parseInt(transactionLimit);
+        return super.getPropertyContainer().getGetTransactionGeneratorLimit();
     }
 }

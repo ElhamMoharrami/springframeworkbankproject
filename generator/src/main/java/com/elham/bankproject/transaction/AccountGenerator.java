@@ -2,17 +2,13 @@ package com.elham.bankproject.transaction;
 
 import com.elham.bankproject.model.Account;
 import com.elham.bankproject.model.Customer;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class AccountGenerator extends AbstractGenerator<Account> {
-    @Value("${accountgenerator.bound.min}")
-    private String accountMinBound;
-    @Value("${accountgenerator.bound.max}")
-    private String accountMaxBound;
+
     private static final List<Integer> accIds = new ArrayList<>();
     private static final List<Account> accounts = new ArrayList<>();
     private final List<Customer> customersList;
@@ -27,8 +23,8 @@ public class AccountGenerator extends AbstractGenerator<Account> {
 
     @Override
     public List<Account> generate() {
-        int accountMinBound = Integer.parseInt(this.accountMinBound);
-        int accountMaxBound = Integer.parseInt(this.accountMaxBound);
+        int accountMinBound = super.getPropertyContainer().getGetAccountGeneratorMinBound();
+        int accountMaxBound = super.getPropertyContainer().getAccountGeneratorMaxBound();
         Random random = new Random();
         int accountId = 1;
         for (Customer customer : customersList) {

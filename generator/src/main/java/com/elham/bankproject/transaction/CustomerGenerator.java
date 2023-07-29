@@ -1,7 +1,6 @@
 package com.elham.bankproject.transaction;
 
 import com.elham.bankproject.model.Customer;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,15 +8,13 @@ import java.util.List;
 import java.util.Random;
 
 public class CustomerGenerator extends AbstractGenerator<Customer> {
-    @Value("${customergenerator.customerCount}")
-    private String customerCount;
 
     @Override
     public List<Customer> generate() {
         final List<String> fName = Arrays.asList("Julian", "Dante", "Jacks", "Scarlet", "Tella", "Nicolas");
         final List<String> lName = Arrays.asList("Santos", "Dragna", "Duarte", "Green", "Blake", "Roans");
         List<Customer> customers = new ArrayList<>();
-        int customerCount = Integer.parseInt(this.customerCount);
+        int customerCount = super.getPropertyContainer().getCustomerCount();
         for (int i = 1; i <= customerCount; i++) {
             long customerId = Long.parseLong(String.valueOf(i));
             Random random = new Random();

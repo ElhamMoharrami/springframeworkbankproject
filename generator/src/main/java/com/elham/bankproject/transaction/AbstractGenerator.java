@@ -1,16 +1,21 @@
 package com.elham.bankproject.transaction;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.elham.bankproject.common.PropertyContainer;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public abstract class AbstractGenerator<T> {
-    @Value("${files.destination}")
-    private String fileLocation;
+    private PropertyContainer propertyContainer;
+
+    @Autowired
+    public void setPropertyContainer(PropertyContainer propertyContainer) {
+        this.propertyContainer = propertyContainer;
+    }
 
     public abstract List<T> generate();
 
-    public String getFileLocation() {
-        return fileLocation;
+    public PropertyContainer getPropertyContainer() {
+        return propertyContainer;
     }
 }
