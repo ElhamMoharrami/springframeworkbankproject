@@ -7,7 +7,15 @@
         <option value="$PROJECT_DIR$/loader/pom.xml" />
         <option value="$PROJECT_DIR$/searcher/pom.xml" />
         <option value="$PROJECT_DIR$/generator/pom.xml" />
+        <option value="$PROJECT_DIR$/data/pom.xml" />
+        <option value="$PROJECT_DIR$/bankData/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/bankData/pom.xml" />
+        <option value="$PROJECT_DIR$/data/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">

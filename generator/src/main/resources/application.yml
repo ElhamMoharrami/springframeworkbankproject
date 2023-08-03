@@ -1,25 +1,19 @@
 spring:
   main:
     allow-bean-definition-overriding: true
-db:
-  username: postgres
-  password: 123456
-  url: jdbc:postgresql://localhost:5432/bankdb
 files:
   destination: /home/elham/workspace/bank/files
-customergenerator:
+customer-generator:
   customerCount: 20
 accountGenerator:
   bound:
     min: 1
     max: 3
-transactiongenerator:
+transaction-generator:
   transaction:
     max: 110
     min: 50
     limit: 1000
-    statusCount: 3
-
 loader:
   thread:
     count: 4

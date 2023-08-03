@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    defer-datasource-initialization: true
+    generate-ddl: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankdb
+    username: postgres
+    password: 123456
+  main:
+    allow-bean-definition-overriding: true
+files:
+  destination: /home/elham/workspace/bank/files
