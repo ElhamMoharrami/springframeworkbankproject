@@ -9,12 +9,11 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.env.Environment;
-
 import java.util.List;
 
 @Configuration
 public class AnnotationConfig {
+
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     CsvWriter<?> csvWriter(String fileName) {
@@ -39,8 +38,8 @@ public class AnnotationConfig {
     }
 
     @Bean
-    PropertyContainer propertyContainer(Environment environment) {
-        return new PropertyContainer(environment);
+    PropertyContainer propertyContainer() {
+        return new PropertyContainer();
     }
 
     @Bean

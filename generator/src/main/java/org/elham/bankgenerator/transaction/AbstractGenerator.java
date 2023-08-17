@@ -1,6 +1,5 @@
 package org.elham.bankgenerator.transaction;
 
-
 import org.elham.bankgenerator.common.PropertyContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 

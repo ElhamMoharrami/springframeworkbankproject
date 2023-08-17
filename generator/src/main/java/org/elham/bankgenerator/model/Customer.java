@@ -1,6 +1,5 @@
 package org.elham.bankgenerator.model;
 
-
 public class Customer {
     private final long customerId;
     private final String name;

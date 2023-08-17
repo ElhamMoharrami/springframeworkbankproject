@@ -1,8 +1,5 @@
 package org.elham.bankgenerator.transaction;
 
-
-
-
 import org.elham.bankgenerator.model.Customer;
 
 import java.util.ArrayList;

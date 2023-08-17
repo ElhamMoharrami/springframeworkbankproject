@@ -1,52 +1,72 @@
 package org.elham.bankgenerator.common;
 
-import org.springframework.core.env.Environment;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
+@Component
+@ConfigurationProperties("generator-config")
 public class PropertyContainer {
-    private final String filesDestination;
-    private final String customerCount;
-    private final String accountGeneratorMaxBound;
-    private final String accountGeneratorMinBound;
-    private final String transactionGeneratorMaxBound;
-    private final String transactionGeneratorMinBound;
-    private final String transactionGeneratorLimit;
+    private String fileDestination;
+    private int customerCount;
+    private int accountMin;
+    private int accountMax;
+    private int transactionMax;
+    private int transactionMin;
+    private int transactionLimit;
 
-    public PropertyContainer(Environment environment) {
-        this.filesDestination = environment.getProperty("files.destination");
-        this.customerCount = environment.getProperty("customer-generator.customerCount");
-        this.accountGeneratorMaxBound = environment.getProperty("accountGenerator.bound.max");
-        this.accountGeneratorMinBound = environment.getProperty("accountGenerator.bound.min");
-        this.transactionGeneratorMaxBound = environment.getProperty("transaction-generator.transaction.max");
-        this.transactionGeneratorMinBound = environment.getProperty("transaction-generator.transaction.min");
-        this.transactionGeneratorLimit = environment.getProperty("transaction-generator.transaction.limit");
-
+    public String getFileDestination() {
+        return fileDestination;
     }
 
-    public String getFilesDestination() {
-        return filesDestination;
+    public void setFileDestination(String filesDestination) {
+        this.fileDestination = filesDestination;
     }
 
-    public Integer getCustomerCount() {
-        return Integer.parseInt(this.customerCount);
+    public int getCustomerCount() {
+        return customerCount;
     }
 
-    public Integer getAccountGeneratorMaxBound() {
-        return Integer.parseInt(this.accountGeneratorMaxBound);
+    public void setCustomerCount(int customerCount) {
+        this.customerCount = customerCount;
     }
 
-    public Integer getGetAccountGeneratorMinBound() {
-        return Integer.parseInt(this.accountGeneratorMinBound);
+    public int getAccountMin() {
+        return accountMin;
     }
 
-    public Integer getTransactionGeneratorMaxBound() {
-        return Integer.parseInt(this.transactionGeneratorMaxBound);
+    public void setAccountMin(int accountMin) {
+        this.accountMin = accountMin;
     }
 
-    public Integer getTransactionGeneratorMinBound() {
-        return Integer.parseInt(this.transactionGeneratorMinBound);
+    public int getAccountMax() {
+        return accountMax;
     }
 
-    public Integer getGetTransactionGeneratorLimit() {
-        return Integer.parseInt(this.transactionGeneratorLimit);
+    public void setAccountMax(int accountMax) {
+        this.accountMax = accountMax;
+    }
+
+    public int getTransactionMax() {
+        return transactionMax;
+    }
+
+    public void setTransactionMax(int transactionMax) {
+        this.transactionMax = transactionMax;
+    }
+
+    public int getTransactionMin() {
+        return transactionMin;
+    }
+
+    public void setTransactionMin(int transactionMin) {
+        this.transactionMin = transactionMin;
+    }
+
+    public int getTransactionLimit() {
+        return transactionLimit;
+    }
+
+    public void setTransactionLimit(int transactionLimit) {
+        this.transactionLimit = transactionLimit;
     }
 }

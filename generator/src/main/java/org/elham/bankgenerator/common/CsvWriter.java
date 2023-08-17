@@ -24,7 +24,7 @@ public class CsvWriter<T> {
     }
 
     public void writeToFile(String header, List<T> list) {
-        this.fileLocation = propertyContainer.getFilesDestination();
+        this.fileLocation = propertyContainer.getFileDestination();
         Path filePath = FileSystems.getDefault().getPath(fileLocation, fileName);
         try (BufferedWriter bufferedList = Files.newBufferedWriter(filePath)) {
             BasicFileAttributes attributes = Files.readAttributes(filePath, BasicFileAttributes.class);

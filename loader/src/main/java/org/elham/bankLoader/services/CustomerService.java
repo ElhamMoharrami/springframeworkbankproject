@@ -1,9 +1,10 @@
 package org.elham.bankLoader.services;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.elham.bankLoader.model.Customer;
 import org.elham.bankLoader.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -13,6 +14,7 @@ import java.io.FileReader;
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    private static final Logger logger = LogManager.getLogger(CustomerService.class);
 
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
@@ -22,7 +24,8 @@ public class CustomerService {
     private String fileDestination;
 
     public void run() throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader(ResourceUtils.getFile(fileDestination+"/customers.csv")));
+        long startCustomerLoadTimeMillis = System.currentTimeMillis();
+        BufferedReader reader = new BufferedReader(new FileReader(ResourceUtils.getFile(fileDestination + "/customers.csv")));
         String line;
         boolean isFirstRow = true;
         while ((line = reader.readLine()) != null) {
@@ -41,5 +44,8 @@ public class CustomerService {
             customerRepository.save(csvData);
         }
         reader.close();
+        long endCustomerLoadTimeMillis = System.currentTimeMillis();
+        long timeToLoadCustomers = endCustomerLoadTimeMillis - startCustomerLoadTimeMillis;
+        logger.info("accounts loaded in database. took " + timeToLoadCustomers + " milli seconds.");
     }
 }

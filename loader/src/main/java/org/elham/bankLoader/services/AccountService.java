@@ -1,5 +1,7 @@
 package org.elham.bankLoader.services;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.elham.bankLoader.model.Account;
 import org.elham.bankLoader.repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,8 @@ import java.io.FileReader;
 public class AccountService {
     private final AccountRepository accountRepository;
 
+    private static final Logger logger = LogManager.getLogger(AccountService.class);
+
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
@@ -21,7 +25,8 @@ public class AccountService {
     private String fileDestination;
 
     public void run() throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader(ResourceUtils.getFile(fileDestination+"/accounts.csv")));
+        long startAccountLoadTimeMillis = System.currentTimeMillis();
+        BufferedReader reader = new BufferedReader(new FileReader(ResourceUtils.getFile(fileDestination + "/accounts.csv")));
         String line;
         boolean isFirstRow = true;
         while ((line = reader.readLine()) != null) {
@@ -36,5 +41,8 @@ public class AccountService {
             accountRepository.save(csvData);
         }
         reader.close();
+        long endAccountLoadTimeMillis = System.currentTimeMillis();
+        long timeToLoadAccounts = endAccountLoadTimeMillis - startAccountLoadTimeMillis;
+        logger.info("accounts loaded in database. took " + timeToLoadAccounts + " milli seconds.");
     }
 }

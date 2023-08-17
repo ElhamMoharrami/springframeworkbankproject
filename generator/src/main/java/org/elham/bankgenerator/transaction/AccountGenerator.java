@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class AccountGenerator extends AbstractGenerator<Account> {
 
-    private static final List<Integer> accIds = new ArrayList<>();
+    private static final List<Long> accIds = new ArrayList<>();
     private static final List<Account> accounts = new ArrayList<>();
     private final List<Customer> customersList;
 
@@ -17,16 +17,16 @@ public class AccountGenerator extends AbstractGenerator<Account> {
         this.customersList = customersList;
     }
 
-    public static List<Integer> getAccIds() {
+    public static List<Long> getAccIds() {
         return accIds;
     }
 
     @Override
     public List<Account> generate() {
-        int accountMinBound = super.getPropertyContainer().getGetAccountGeneratorMinBound();
-        int accountMaxBound = super.getPropertyContainer().getAccountGeneratorMaxBound();
+        int accountMinBound = super.getPropertyContainer().getAccountMin();
+        int accountMaxBound = super.getPropertyContainer().getAccountMax();
         Random random = new Random();
-        int accountId = 1;
+        Long accountId = 1L;
         for (Customer customer : customersList) {
             int countAccounts = random.nextInt(accountMaxBound) + accountMinBound;
             for (int j = 1; j <= countAccounts; j++) {

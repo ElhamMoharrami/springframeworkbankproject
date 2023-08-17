@@ -21,10 +21,10 @@ public class TransactionGenerator extends AbstractGenerator<Transaction> {
     @Override
     public List<Transaction> generate() {
         Random random = new Random();
-        List<Integer> accountIds = AccountGenerator.getAccIds();
-        int countTransactions = random.nextInt(super.getPropertyContainer().getTransactionGeneratorMinBound() +
-                super.getPropertyContainer().getTransactionGeneratorMaxBound()) +
-                super.getPropertyContainer().getTransactionGeneratorMaxBound();
+        List<Long> accountIds = AccountGenerator.getAccIds();
+        int countTransactions = random.nextInt(super.getPropertyContainer().getTransactionMin() +
+                super.getPropertyContainer().getTransactionMax()) +
+                super.getPropertyContainer().getTransactionMax();
         long transactionId = 0;
         for (Account account : accounts) {
             for (int i = 0; i < countTransactions; i++) {
@@ -58,6 +58,6 @@ public class TransactionGenerator extends AbstractGenerator<Transaction> {
     }
 
     public Integer getTransactionLimit() {
-        return super.getPropertyContainer().getGetTransactionGeneratorLimit();
+        return super.getPropertyContainer().getTransactionLimit();
     }
 }

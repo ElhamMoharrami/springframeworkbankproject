@@ -1,5 +1,7 @@
 package org.elham.bankLoader.services;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.elham.bankLoader.model.TransactType;
 import org.elham.bankLoader.model.Transaction;
 import org.elham.bankLoader.repositories.TransactionRepository;
@@ -19,11 +21,14 @@ public class TransactionService {
     @Value("${files.destination}")
     private String fileDestination;
 
+    private static final Logger logger = LogManager.getLogger(TransactionService.class);
+
     public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 
     public void run() throws Exception {
+        long startTransactionLoadTimeMillis = System.currentTimeMillis();
         int counter = 1000;
         boolean quitFlag = true;
         while (quitFlag) {
@@ -49,6 +54,9 @@ public class TransactionService {
                     transactionRepository.save(csvData);
                 }
                 reader.close();
+                long endTransactionLoadTimeMillis = System.currentTimeMillis();
+                long timeToLoadTransactions = endTransactionLoadTimeMillis - startTransactionLoadTimeMillis;
+                logger.info("accounts loaded in database. took " + timeToLoadTransactions + " milli seconds.");
                 counter += 1000;
             } else {
                 quitFlag = false;

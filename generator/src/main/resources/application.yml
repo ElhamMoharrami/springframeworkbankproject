@@ -1,19 +1,11 @@
 spring:
   main:
     allow-bean-definition-overriding: true
-files:
-  destination: /home/elham/workspace/bank/files
-customer-generator:
-  customerCount: 20
-accountGenerator:
-  bound:
-    min: 1
-    max: 3
-transaction-generator:
-  transaction:
-    max: 110
-    min: 50
-    limit: 1000
-loader:
-  thread:
-    count: 4
+generator-config:
+     fileDestination: /home/elham/workspace/bank/files
+     customerCount: 20
+     accountMin: 1
+     accountMax: 3
+     transactionMax: 110
+     transactionMin: 50
+     transactionLimit: 1000
