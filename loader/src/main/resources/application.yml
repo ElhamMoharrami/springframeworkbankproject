@@ -8,5 +8,10 @@ spring:
     password: 123456
   main:
     allow-bean-definition-overriding: true
-files:
-  destination: /home/elham/workspace/bank/files
+loader-config:
+  customersSource: /home/elham/workspace/bank/files/input/customers
+  accountsSource: /home/elham/workspace/bank/files/input/accounts
+  transactionsSource: /home/elham/workspace/bank/files/input/transactions
+  customersOutDestination: /home/elham/workspace/bank/files/output/customers
+  accountsOutDestination: /home/elham/workspace/bank/files/output/accounts
+  transactionsOutDestination: /home/elham/workspace/bank/files/output/transactions

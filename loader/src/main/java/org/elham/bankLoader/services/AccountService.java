@@ -4,11 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.elham.bankLoader.model.Account;
 import org.elham.bankLoader.repositories.AccountRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 
 @Service
@@ -21,12 +20,10 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    @Value("${files.destination}")
-    private String fileDestination;
 
-    public void run() throws Exception {
+    public void run(File file) throws Exception {
         long startAccountLoadTimeMillis = System.currentTimeMillis();
-        BufferedReader reader = new BufferedReader(new FileReader(ResourceUtils.getFile(fileDestination + "/accounts.csv")));
+        BufferedReader reader = new BufferedReader(new FileReader(file));
         String line;
         boolean isFirstRow = true;
         while ((line = reader.readLine()) != null) {
