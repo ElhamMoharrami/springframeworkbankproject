@@ -6,12 +6,10 @@ import org.elham.bankLoader.model.PropertyContainer;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.*;
 import java.util.concurrent.ExecutorService;
 
 @Service
-public class FileProcessorService {
+public class FileProcessorService extends FileHandler {
     private final TransactionService transactionService;
 
     private final CustomerService customerService;
@@ -45,16 +43,14 @@ public class FileProcessorService {
                     if (file.isFile()) {
                         if (type.equals("customers")) {
                             logger.info("New customers file detected: " + file.getName());
-                            customerService.run(file);
-                            moveFileToBackup(file, destPath);
+                            customerService.run(file,propertyContainer.getCustomersOutDestination());
                             processFiles(propertyContainer.getAccountsSource(),
                                     propertyContainer.getAccountsOutDestination(), "accounts");
                         }
                         if (type.equals("accounts")) {
                             logger.info("New account file detected: " + file.getName());
-                            accountService.run(file);
+                            accountService.run(file,destPath);
                             connectAccountsToCustomersService.ConnectAccountToCustomer();
-                            moveFileToBackup(file, destPath);
                         }
                     }
                 }
@@ -73,35 +69,20 @@ public class FileProcessorService {
             File[] files = folder.listFiles();
             if (files != null) {
                 for (File trFile : files) {
-                    String fileName = trFile.getName();
-                    String newFileName = fileName.substring(0, fileName.lastIndexOf(".")) + "threaded.csv";
-                    String parentPath = trFile.getParent();
-                    File renamedFile = new File(parentPath, newFileName);
-                    if (renamedFile.isFile() && renamedFile.exists()) {
-                        executor.submit(() -> {
-                            try {
-                                transactionService.run(renamedFile);
-                                moveFileToBackup(renamedFile, destPath);
-                            } catch (Exception e) {
-                                System.out.println(e.getMessage());
+                    String originalName = trFile.getName();
+                    executor.submit(() -> {
+                        try {
+                            if (trFile.isFile() && trFile.exists() && !originalName.contains("threaded") ) {
+                               transactionService.run(trFile,destPath);
                             }
-                        });
-                    }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                    });
                 }
             }
         } catch (Exception e) {
             logger.warn("exception in load transaction in file processor");
-        }
-    }
-
-    public void moveFileToBackup(File file, String destPath) {
-        try {
-            Path sourcePath = file.toPath();
-            Path backupPath = Paths.get(destPath, file.getName());
-            Files.move(sourcePath, backupPath);
-            logger.info("Moved file " + file.getName() + " to backup directory.");
-        } catch (IOException e) {
-            logger.warn("IOException in move file to backup.");
         }
     }
 }

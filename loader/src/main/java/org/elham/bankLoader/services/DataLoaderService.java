@@ -27,14 +27,16 @@ public class DataLoaderService implements CommandLineRunner {
     public void run(String... args) {
         try {
             ExecutorService executor = Executors.newFixedThreadPool(3);
-            fileProcessor.processFiles(propertyContainer.getCustomersSource(),
-                    propertyContainer.getCustomersOutDestination(), "customers");
-            fileProcessor.loadTransaction(executor, propertyContainer.getTransactionsSource(),
-                    propertyContainer.getTransactionsOutDestination());
-            pathWatcher.watchPaths(executor);
-            executor.shutdown();
+            while (true) {
+                fileProcessor.processFiles(propertyContainer.getCustomersSource(),
+                        propertyContainer.getCustomersOutDestination(), "customers");
+                fileProcessor.loadTransaction(executor, propertyContainer.getTransactionsSource(),
+                        propertyContainer.getTransactionsOutDestination());
+                pathWatcher.watchPaths(executor);
+            }
         } catch (Exception e) {
             logger.warn("exception happened in data loader service.");
+            System.out.println(e.getMessage());
         }
 
     }

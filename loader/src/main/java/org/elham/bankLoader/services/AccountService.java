@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 
 @Service
-public class AccountService {
+public class AccountService extends FileHandler {
     private final AccountRepository accountRepository;
 
     private static final Logger logger = LogManager.getLogger(AccountService.class);
@@ -21,9 +21,10 @@ public class AccountService {
     }
 
 
-    public void run(File file) throws Exception {
+    public void run(File file,String destPath) throws Exception {
         long startAccountLoadTimeMillis = System.currentTimeMillis();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+        File renamedFile = renameFile(file);
+        BufferedReader reader = new BufferedReader(new FileReader(renamedFile));
         String line;
         boolean isFirstRow = true;
         while ((line = reader.readLine()) != null) {
@@ -41,5 +42,6 @@ public class AccountService {
         long endAccountLoadTimeMillis = System.currentTimeMillis();
         long timeToLoadAccounts = endAccountLoadTimeMillis - startAccountLoadTimeMillis;
         logger.info("accounts loaded in database. took " + timeToLoadAccounts + " milli seconds.");
+        moveFileToBackup(renamedFile, destPath);
     }
 }

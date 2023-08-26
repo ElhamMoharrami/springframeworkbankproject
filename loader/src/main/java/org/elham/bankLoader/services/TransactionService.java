@@ -13,7 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 @Service
-public class TransactionService {
+public class TransactionService extends FileHandler {
     private final TransactionRepository transactionRepository;
 
     private static final Logger logger = LogManager.getLogger(TransactionService.class);
@@ -22,10 +22,10 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public void run(File file) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file));) {
+    public void run(File file, String destPath) {
+        File renamedFile = renameFile(file);
+        try (BufferedReader reader = new BufferedReader(new FileReader(renamedFile))) {
             long startTransactionLoadTimeMillis = System.currentTimeMillis();
-
             String line;
             boolean isFirstRow = true;
             while ((line = reader.readLine()) != null) {
@@ -46,10 +46,13 @@ public class TransactionService {
             reader.close();
             long endTransactionLoadTimeMillis = System.currentTimeMillis();
             long timeToLoadTransactions = endTransactionLoadTimeMillis - startTransactionLoadTimeMillis;
-            logger.info(file.getName() + " loaded in database. took " + timeToLoadTransactions + " milli seconds.");
+            logger.info(renamedFile.getName() + " loaded in database. took " + timeToLoadTransactions + " milli seconds.");
+            moveFileToBackup(renamedFile, destPath);
         } catch (IOException e) {
-          logger.warn("i/o exception happened in TransactionService");
+            logger.warn("i/o exception happened in TransactionService");
         }
     }
+
+
 }
 

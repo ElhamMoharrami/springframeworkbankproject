@@ -17,20 +17,17 @@ public class PathWatcherService {
 
     private final TransactionService transactionService;
     private final ConnectAccountsToCustomersService connectAccountsToCustomersService;
-    private final FileProcessorService fileProcessor;
 
     private static final Logger logger = LogManager.getLogger(DataLoaderService.class);
 
     public PathWatcherService(PropertyContainer propertyContainer, AccountService accountService,
                               CustomerService customerService, TransactionService transactionService,
-                              ConnectAccountsToCustomersService connectAccountsToCustomersService,
-                              FileProcessorService fileProcessor) {
+                              ConnectAccountsToCustomersService connectAccountsToCustomersService) {
         this.propertyContainer = propertyContainer;
         this.accountService = accountService;
         this.customerService = customerService;
         this.transactionService = transactionService;
         this.connectAccountsToCustomersService = connectAccountsToCustomersService;
-        this.fileProcessor = fileProcessor;
     }
 
     public void watchPaths(ExecutorService executor) {
@@ -46,45 +43,37 @@ public class PathWatcherService {
             Path transactionsDir = Paths.get(propertyContainer.getTransactionsSource());
             transactionsDir.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
 
-            while (true) {
-                WatchKey key = watchService.take();
-                for (WatchEvent<?> event : key.pollEvents()) {
-                    WatchEvent.Kind<?> kind = event.kind();
-                    if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
-                        Path filePath = ((Path) key.watchable()).resolve((Path) event.context());
-                        File file = filePath.toFile();
+            WatchKey key = watchService.take();
+            for (WatchEvent<?> event : key.pollEvents()) {
+                WatchEvent.Kind<?> kind = event.kind();
+                if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
+                    Path filePath = ((Path) key.watchable()).resolve((Path) event.context());
+                    File file = filePath.toFile();
+                    String originalName = file.getName();
+                    if (!originalName.contains("threaded")) {
+                        if (customersDir.equals(key.watchable())) {
+                            logger.info("New customers file detected: " + file.getName());
+                            customerService.run(file, propertyContainer.getCustomersOutDestination());
+                        }
                         if (accountsDir.equals(key.watchable())) {
-                           logger.info("New accounts file detected: " + file.getName());
-                            accountService.run(file);
+                            logger.info("New account file detected: " + file.getName());
+                            accountService.run(file, propertyContainer.getAccountsOutDestination());
                             connectAccountsToCustomersService.ConnectAccountToCustomer();
-                            fileProcessor.moveFileToBackup(file, propertyContainer.getAccountsOutDestination());
-                        } else if (customersDir.equals(key.watchable())) {
-                          logger.info("New customers file detected: " + file.getName());
-                            executor.submit(() -> {
-                                try {
-                                    customerService.run(file);
-                                } catch (Exception e) {
-                                    throw new RuntimeException(e);
-                                }
-                                fileProcessor.moveFileToBackup(file, propertyContainer.getCustomersOutDestination());
-                            });
                         }
                         if (transactionsDir.equals(key.watchable())) {
-                           logger.info("New transactions file detected: " + file.getName());
-                            executor.submit(() -> {
+                            logger.info("New transactions file detected: " + file.getName());
+                            executor.execute(() -> {
                                 try {
-                                    transactionService.run(file);
-                                    fileProcessor.moveFileToBackup(file, propertyContainer.getTransactionsOutDestination());
+                                    transactionService.run(file, propertyContainer.getTransactionsOutDestination());
                                 } catch (Exception e) {
-                                    System.out.println(e.getMessage());
+                                    logger.warn("exception happened in transaction watcher");
                                 }
                             });
                         }
                     }
                 }
-                key.reset();
             }
-
+            key.reset();
         } catch (Exception e) {
             logger.warn("exception in PathWatcher");
         }
