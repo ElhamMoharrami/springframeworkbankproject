@@ -7,31 +7,31 @@ import javax.persistence.*;
 public class Transaction {
     @Id
     @Column(name = "transaction_id")
-    private String id;
+    private Long id;
     @Column(name = "transaction_time")
-    private String time;
+    private Long time;
     @Column(name = "amount")
     private double amount;
     @Column(name = "source_id")
-    private String accAId;
+    private Long accAId;
     @Column(name = "destination_id")
-    private String accBId;
+    private Long accBId;
     @Enumerated(value = EnumType.STRING)
     private TransactType type;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 
@@ -43,19 +43,19 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getAccAId() {
+    public Long getAccAId() {
         return accAId;
     }
 
-    public void setAccAId(String accAId) {
+    public void setAccAId(Long accAId) {
         this.accAId = accAId;
     }
 
-    public String getAccBId() {
+    public Long getAccBId() {
         return accBId;
     }
 
-    public void setAccBId(String accBId) {
+    public void setAccBId(Long accBId) {
         this.accBId = accBId;
     }
 

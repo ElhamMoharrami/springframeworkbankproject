@@ -1,23 +1,27 @@
 package org.elham.bankSearcher.model;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
 
 @Entity
 public class TransactionProjection {
     private String customerName;
-    private String customerId;
-    private String accountId;
-    private String transactionId;
-    private String sourceAccountId;
-    private String destinationAccountId;
+    private Long customerId;
+    private Long accountId;
+    private Long transactionId;
+    private Long sourceAccountId;
+    private Long destinationAccountId;
     private double amount;
     private TransactType type;
     @Id
     private Long id;
 
-    public TransactionProjection(String customerName, String customerId, String accountId, String transactionId,
-                                 String sourceAccountId, String destinationAccountId, double amount, TransactType type) {
+
+    public TransactionProjection(String customerName, Long customerId, Long accountId, Long transactionId,
+                                 Long sourceAccountId, Long destinationAccountId, double amount, TransactType type) {
         this.customerName = customerName;
         this.customerId = customerId;
         this.accountId = accountId;

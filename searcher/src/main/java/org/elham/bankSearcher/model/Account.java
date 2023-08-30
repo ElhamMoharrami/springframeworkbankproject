@@ -7,27 +7,27 @@ import javax.persistence.*;
 public class Account {
     @Id
     @Column(name = "account_id")
-    private String accountId;
+    private Long accountId;
     @Column(name = "customer_id")
-    private String customerId;
+    private Long customerId;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", insertable = false, updatable = false)
     private Customer customer;
 
-    public String getAccountId() {
+    public Long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(Long accountId) {
         this.accountId = accountId;
     }
 
-    public String getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 

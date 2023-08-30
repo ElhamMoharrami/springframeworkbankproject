@@ -1,5 +1,6 @@
 package org.elham.bankSearcher.repositories;
 
+
 import org.elham.bankSearcher.model.TransactionProjection;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

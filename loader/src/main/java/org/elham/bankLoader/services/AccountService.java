@@ -34,8 +34,8 @@ public class AccountService extends FileHandler {
             }
             String[] columns = line.split(",");
             Account csvData = new Account();
-            csvData.setCustomerId(columns[0]);
-            csvData.setAccountId(columns[1]);
+            csvData.setCustomerId(Long.valueOf(columns[0]));
+            csvData.setAccountId(Long.valueOf(columns[1]));
             accountRepository.save(csvData);
         }
         reader.close();

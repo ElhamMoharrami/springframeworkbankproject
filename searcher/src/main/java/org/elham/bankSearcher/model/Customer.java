@@ -9,7 +9,7 @@ import java.util.List;
 public class Customer {
     @Id
     @Column(name = "customer_id")
-    private String customerId;
+    private Long customerId;
     @Column(name = "customer_name")
     private String name;
     @Column(name = "customer_address")
@@ -17,11 +17,11 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Account> accounts = new ArrayList<>();
 
-    public String getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 

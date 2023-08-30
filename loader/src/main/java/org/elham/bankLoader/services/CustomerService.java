@@ -33,7 +33,7 @@ public class CustomerService extends FileHandler {
             }
             String[] columns = line.split(",");
             Customer csvData = new Customer();
-            csvData.setCustomerId(columns[0]);
+            csvData.setCustomerId(Long.valueOf(columns[0]));
             csvData.setName(columns[1]);
             csvData.setAddress(columns[2]);
             customerRepository.save(csvData);
