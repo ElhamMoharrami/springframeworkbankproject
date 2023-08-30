@@ -1,4 +1,4 @@
-package org.elham.bankLoader.model;
+package org.elham.bankSearcher.model;
 
 import javax.persistence.*;
 

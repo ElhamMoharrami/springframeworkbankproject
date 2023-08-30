@@ -20,6 +20,7 @@ public class FileHandler {
             logger.info("Moved file " + file.getName() + " to backup directory.");
         } catch (IOException e) {
             logger.warn("IOException in move file to backup.");
+            e.printStackTrace();
         }
     }
 

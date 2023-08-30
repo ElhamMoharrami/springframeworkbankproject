@@ -2,7 +2,9 @@ spring:
   main:
     allow-bean-definition-overriding: true
 generator-config:
-     fileDestination: /home/elham/workspace/bank/files
+     customerFileDestination: /home/elham/workspace/bank/files/input/customers
+     accountFileDestination: /home/elham/workspace/bank/files/input/accounts
+     transactionFileDestination: /home/elham/workspace/bank/files/input/transactions
      customerCount: 20
      accountMin: 1
      accountMax: 3

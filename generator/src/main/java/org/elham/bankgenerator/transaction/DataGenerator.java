@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.elham.bankgenerator.common.CsvWriter;
+import org.elham.bankgenerator.common.PropertyContainer;
 import org.elham.bankgenerator.model.Account;
 import org.elham.bankgenerator.model.Customer;
 import org.elham.bankgenerator.model.Transaction;
@@ -15,6 +16,11 @@ import org.springframework.context.ApplicationContextAware;
 import java.util.List;
 
 public class DataGenerator implements ApplicationContextAware {
+    public DataGenerator(PropertyContainer propertyContainer) {
+        this.propertyContainer = propertyContainer;
+    }
+
+    private PropertyContainer propertyContainer;
     List<Customer> customerList;
     List<Account> accountList;
     private static final Logger logger = LogManager.getLogger(DataGenerator.class);
@@ -25,7 +31,7 @@ public class DataGenerator implements ApplicationContextAware {
         CustomerGenerator customerGenerator = (CustomerGenerator) ctx.getBean("customerGenerator");
         this.customerList = customerGenerator.generate();
         CsvWriter<Customer> customerCsvWriter = (CsvWriter<Customer>) ctx.getBean("csvWriter",
-                "customers.csv");
+                "customers.csv",propertyContainer.getCustomerFileDestination());
         customerCsvWriter.writeToFile("CustomerId,Name,PostAddress", customerList);
         long endCustomerGenerateTimeMillis = System.currentTimeMillis();
         long timeToGenerateCustomers = endCustomerGenerateTimeMillis - startCustomerGenerateTimeMillis;
@@ -37,7 +43,7 @@ public class DataGenerator implements ApplicationContextAware {
         long startAccountGenerateTimeMillis = System.currentTimeMillis();
         AccountGenerator accountGenerator = (AccountGenerator) ctx.getBean("accountGenerator", customerList);
         this.accountList = accountGenerator.generate();
-        CsvWriter<Account> accountWriter = (CsvWriter<Account>) ctx.getBean("csvWriter", "accounts.csv");
+        CsvWriter<Account> accountWriter = (CsvWriter<Account>) ctx.getBean("csvWriter", "accounts.csv",propertyContainer.getAccountFileDestination());
         accountWriter.writeToFile("CustomerId,AccountId", accountList);
         long endAccountGenerateTimeMillis = System.currentTimeMillis();
         long timeToGenerateAccounts = endAccountGenerateTimeMillis - startAccountGenerateTimeMillis;
@@ -54,7 +60,7 @@ public class DataGenerator implements ApplicationContextAware {
             int end = Math.min(trListSize, i + transactionLimit);
             List<Transaction> sublist = transactionList.subList(i, end);
             CsvWriter<Transaction> transactionWriter = (CsvWriter<Transaction>) ctx.getBean("csvWriter",
-                    "transaction" + i + ".csv");
+                    "transaction" + i + ".csv",propertyContainer.getTransactionFileDestination());
             transactionWriter.writeToFile("TransactionId,EpochTime,Amount,SourceAcc,DestinationAcc,Type", sublist);
         }
     }

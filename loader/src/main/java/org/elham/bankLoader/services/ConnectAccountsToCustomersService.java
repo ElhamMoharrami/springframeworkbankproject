@@ -28,7 +28,7 @@ public class ConnectAccountsToCustomersService {
         Map<String, Customer> customerMap = customersList.stream()
                 .collect(Collectors.toMap(Customer::getCustomerId, Function.identity()));
         for (Account account : accountsList) {
-            String customerId = account.getCustomerId();
+            String customerId = String.valueOf(account.getCustomerId());
             Customer customer = customerMap.get(customerId);
             customer.addAccount(account);
         }

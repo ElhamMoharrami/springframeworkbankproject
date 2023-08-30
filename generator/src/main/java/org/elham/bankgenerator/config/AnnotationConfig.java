@@ -9,6 +9,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+
 import java.util.List;
 
 @Configuration
@@ -16,8 +17,8 @@ public class AnnotationConfig {
 
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    CsvWriter<?> csvWriter(String fileName) {
-        return new CsvWriter<>(fileName);
+    CsvWriter<?> csvWriter(String fileName, String fileLocation) {
+        return new CsvWriter<>(fileName, fileLocation);
     }
 
     @Bean
@@ -43,8 +44,8 @@ public class AnnotationConfig {
     }
 
     @Bean
-    DataGenerator dataGenerator() {
-        return new DataGenerator();
+    DataGenerator dataGenerator(PropertyContainer propertyContainer) {
+        return new DataGenerator(propertyContainer);
     }
 
     @Bean

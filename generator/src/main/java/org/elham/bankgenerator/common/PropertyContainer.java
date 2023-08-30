@@ -6,7 +6,11 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties("generator-config")
 public class PropertyContainer {
-    private String fileDestination;
+    private String customerFileDestination;
+
+    private String accountFileDestination;
+
+    private String transactionFileDestination;
     private int customerCount;
     private int accountMin;
     private int accountMax;
@@ -14,16 +18,33 @@ public class PropertyContainer {
     private int transactionMin;
     private int transactionLimit;
 
-    public String getFileDestination() {
-        return fileDestination;
-    }
-
-    public void setFileDestination(String filesDestination) {
-        this.fileDestination = filesDestination;
-    }
 
     public int getCustomerCount() {
         return customerCount;
+    }
+
+    public String getCustomerFileDestination() {
+        return customerFileDestination;
+    }
+
+    public void setCustomerFileDestination(String customerFileDestination) {
+        this.customerFileDestination = customerFileDestination;
+    }
+
+    public String getAccountFileDestination() {
+        return accountFileDestination;
+    }
+
+    public void setAccountFileDestination(String accountFileDestination) {
+        this.accountFileDestination = accountFileDestination;
+    }
+
+    public String getTransactionFileDestination() {
+        return transactionFileDestination;
+    }
+
+    public void setTransactionFileDestination(String transactionFileDestination) {
+        this.transactionFileDestination = transactionFileDestination;
     }
 
     public void setCustomerCount(int customerCount) {

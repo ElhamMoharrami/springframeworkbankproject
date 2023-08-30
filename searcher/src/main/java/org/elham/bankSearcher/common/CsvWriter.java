@@ -1,8 +1,7 @@
-package org.elham.bankgenerator.common;
+package org.elham.bankSearcher.common;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
@@ -13,17 +12,11 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
+@Component
 public class CsvWriter<T> {
-    private  String fileName;
-    private String fileLocation;
     private static final Logger logger = LogManager.getLogger(CsvWriter.class);
 
-    public CsvWriter(String fileName, String fileLocation) {
-        this.fileName = fileName;
-        this.fileLocation = fileLocation;
-    }
-
-    public void writeToFile(String header, List<T> list) {
+    public void writeToFile(String header, List<T> list, String fileName, String fileLocation) {
         Path filePath = FileSystems.getDefault().getPath(fileLocation, fileName);
         try (BufferedWriter bufferedList = Files.newBufferedWriter(filePath)) {
             BasicFileAttributes attributes = Files.readAttributes(filePath, BasicFileAttributes.class);
@@ -40,9 +33,5 @@ public class CsvWriter<T> {
             System.out.println(e.getMessage());
             logger.error("Something went wrong,could not create file.");
         }
-    }
-
-    public String getFileLocation() {
-        return fileLocation;
     }
 }

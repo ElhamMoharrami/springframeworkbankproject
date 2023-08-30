@@ -35,11 +35,11 @@ public class TransactionService extends FileHandler {
                 }
                 String[] columns = line.split(",");
                 Transaction csvData = new Transaction();
-                csvData.setId(Long.valueOf(columns[0]));
-                csvData.setTime(Long.valueOf(columns[1]));
+                csvData.setId(columns[0]);
+                csvData.setTime(columns[1]);
                 csvData.setAmount(Double.parseDouble(columns[2]));
-                csvData.setAccAId(Long.valueOf(columns[3]));
-                csvData.setAccBId(Long.valueOf(columns[4]));
+                csvData.setAccAId(columns[3]);
+                csvData.setAccBId(columns[4]);
                 csvData.setType(TransactType.valueOf(columns[5]));
                 transactionRepository.save(csvData);
             }
